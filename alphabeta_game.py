@@ -49,29 +49,45 @@ def winning_move(board, piece):
     # Check horizontal locations for win
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT):
-            if board[r][c] == piece and board[r][c + 1] == piece and board[r][c + 2] == piece and board[r][
-                c + 3] == piece:
+            if (
+                board[r][c] == piece
+                and board[r][c + 1] == piece
+                and board[r][c + 2] == piece
+                and board[r][c + 3] == piece
+            ):
                 return True
 
     # Check vertical locations for win
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT - 3):
-            if board[r][c] == piece and board[r + 1][c] == piece and board[r + 2][c] == piece and board[r + 3][
-                c] == piece:
+            if (
+                board[r][c] == piece
+                and board[r + 1][c] == piece
+                and board[r + 2][c] == piece
+                and board[r + 3][c] == piece
+            ):
                 return True
 
     # Check positively sloped diaganols
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT - 3):
-            if board[r][c] == piece and board[r + 1][c + 1] == piece and board[r + 2][c + 2] == piece and board[r + 3][
-                c + 3] == piece:
+            if (
+                board[r][c] == piece
+                and board[r + 1][c + 1] == piece
+                and board[r + 2][c + 2] == piece
+                and board[r + 3][c + 3] == piece
+            ):
                 return True
 
     # Check negatively sloped diaganols
     for c in range(COLUMN_COUNT - 3):
         for r in range(3, ROW_COUNT):
-            if board[r][c] == piece and board[r - 1][c + 1] == piece and board[r - 2][c + 2] == piece and board[r - 3][
-                c + 3] == piece:
+            if (
+                board[r][c] == piece
+                and board[r - 1][c + 1] == piece
+                and board[r - 2][c + 2] == piece
+                and board[r - 3][c + 3] == piece
+            ):
                 return True
 
 
@@ -99,6 +115,7 @@ def score_position(board, piece):
 
     ## Score center column
     center_array = [int(i) for i in list(board[:, COLUMN_COUNT // 2])]
+    print (f'HOLA: {center_array}')
     center_count = center_array.count(piece)
     score += center_count * 3
 
@@ -106,14 +123,14 @@ def score_position(board, piece):
     for r in range(ROW_COUNT):
         row_array = [int(i) for i in list(board[r, :])]
         for c in range(COLUMN_COUNT - 3):
-            window = row_array[c:c + WINDOW_LENGTH]
+            window = row_array[c : c + WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
     ## Score Vertical
     for c in range(COLUMN_COUNT):
         col_array = [int(i) for i in list(board[:, c])]
         for r in range(ROW_COUNT - 3):
-            window = col_array[r:r + WINDOW_LENGTH]
+            window = col_array[r : r + WINDOW_LENGTH]
             score += evaluate_window(window, piece)
 
     ## Score posiive sloped diagonal
@@ -131,7 +148,11 @@ def score_position(board, piece):
 
 
 def is_terminal_node(board):
-    return winning_move(board, PLAYER_PIECE) or winning_move(board, AI_PIECE) or len(get_valid_locations(board)) == 0
+    return (
+        winning_move(board, PLAYER_PIECE)
+        or winning_move(board, AI_PIECE)
+        or len(get_valid_locations(board)) == 0
+    )
 
 
 def minimax(board, depth, alpha, beta, maximizingPlayer):
@@ -207,18 +228,43 @@ def pick_best_move(board, piece):
 def draw_board(board):
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT):
-            pygame.draw.rect(screen, BLUE, (c * SQUARESIZE, r * SQUARESIZE + SQUARESIZE, SQUARESIZE, SQUARESIZE))
-            pygame.draw.circle(screen, BLACK, (
-            int(c * SQUARESIZE + SQUARESIZE / 2), int(r * SQUARESIZE + SQUARESIZE + SQUARESIZE / 2)), RADIUS)
+            pygame.draw.rect(
+                screen,
+                BLUE,
+                (c * SQUARESIZE, r * SQUARESIZE + SQUARESIZE, SQUARESIZE, SQUARESIZE),
+            )
+            pygame.draw.circle(
+                screen,
+                BLACK,
+                (
+                    int(c * SQUARESIZE + SQUARESIZE / 2),
+                    int(r * SQUARESIZE + SQUARESIZE + SQUARESIZE / 2),
+                ),
+                RADIUS,
+            )
 
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT):
             if board[r][c] == PLAYER_PIECE:
-                pygame.draw.circle(screen, RED, (
-                int(c * SQUARESIZE + SQUARESIZE / 2), height - int(r * SQUARESIZE + SQUARESIZE / 2)), RADIUS)
+                pygame.draw.circle(
+                    screen,
+                    RED,
+                    (
+                        int(c * SQUARESIZE + SQUARESIZE / 2),
+                        height - int(r * SQUARESIZE + SQUARESIZE / 2),
+                    ),
+                    RADIUS,
+                )
             elif board[r][c] == AI_PIECE:
-                pygame.draw.circle(screen, YELLOW, (
-                int(c * SQUARESIZE + SQUARESIZE / 2), height - int(r * SQUARESIZE + SQUARESIZE / 2)), RADIUS)
+                pygame.draw.circle(
+                    screen,
+                    YELLOW,
+                    (
+                        int(c * SQUARESIZE + SQUARESIZE / 2),
+                        height - int(r * SQUARESIZE + SQUARESIZE / 2),
+                    ),
+                    RADIUS,
+                )
     pygame.display.update()
 
 
@@ -246,7 +292,6 @@ myfont = pygame.font.SysFont("monospace", 75)
 turn = random.randint(PLAYER, AI)
 
 while not game_over:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -284,7 +329,6 @@ while not game_over:
 
     # # Ask for Player 2 Input
     if turn == AI and not game_over:
-
         # col = random.randint(0, COLUMN_COUNT-1)
         # col = pick_best_move(board, AI_PIECE)
         col, minimax_score = minimax(board, 5, -math.inf, math.inf, True)
