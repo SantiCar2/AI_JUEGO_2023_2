@@ -74,7 +74,23 @@ def calcular_puntaje(board, ficha, COLS, ROWS): # Calcular el puntaje de un tabl
         for r in range(ROWS): # Recorrer las filas
             opor = arreglo_fila[c : c + 4] # Obtener 4 elementos de la fila
             puntaje += oportunidad(opor, ficha) # Calcular el puntaje de la oportunidad
-    # Verificar horizontal
+    # Verificar vertical
+    for c in range(COLS):
+        arreglo_col = [int(i) for i in list(board[:, c])]
+        for r in range(ROWS - 3):
+            opor = arreglo_col[r : r + 4]
+            puntaje += oportunidad(opor, ficha)
+    # Verificar diagonal positiva
+    for c in range(COLS - 3):
+        for r in range(ROWS - 3):
+            opor = [board[r + i][c + i] for i in range(4)]
+            puntaje += oportunidad(opor, ficha)
+    # Verificar diagonal negativa
+    for c in range(COLS - 3):
+        for r in range(3, ROWS):
+            opor = [board[r - i][c + i] for i in range(4)]
+            puntaje += oportunidad(opor, ficha)
+    return puntaje
 
 
 def oportunidad(opor, ficha):
